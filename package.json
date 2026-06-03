@@ -1,0 +1,19 @@
+{
+  "name": "alem-bank-genet-church",
+  "version": "3.0.0",
+  "private": true,
+  "description": "አለም ባንክ ገነት ቤተ ክርስቲያን - Full stack church website",
+  "scripts": {
+    "dev": "concurrently \"npm run dev:server\" \"npm run dev:client\"",
+    "dev:client": "cd client && npm run dev",
+    "dev:server": "cd server && npm run dev",
+    "build": "cd client && npm run build",
+    "install:all": "npm install && cd client && npm install && cd ../server && npm install"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.0"
+  },
+  "dependencies": {
+    "cloudinary": "^2.10.0"
+  }
+}
