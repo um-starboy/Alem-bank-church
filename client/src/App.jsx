@@ -1,82 +1,36 @@
-import React, { useState, useCallback, lazy, Suspense } from 'react'
-import { Routes, Route, useLocation } from 'react-router-dom'
-import { AnimatePresence } from 'framer-motion'
-import { HelmetProvider } from 'react-helmet-async'
-import { ChurchDataProvider } from './context/ChurchDataContext'
-import { ThemeProvider } from './context/ThemeContext'
-import { AuthProvider } from './context/AuthContext'
-import { useIsTouchDevice, usePrefersReducedMotion } from './hooks/useMediaQuery'
-import Navbar from './components/layout/Navbar'
-import CustomCursor from './components/ui/CustomCursor'
-import NoiseOverlay from './components/effects/NoiseOverlay'
-import ProtectedRoute from './components/ui/ProtectedRoute'
-import ScrollToTop from './utils/ScrollToTop'
-import LoadingScreen from './components/ui/LoadingScreen'
-
-const HomePage       = lazy(() => import('./pages/HomePage'))
-const LoginPage      = lazy(() => import('./pages/LoginPage'))
-const AdminDashboard = lazy(() => import('./pages/AdminDashboard'))
-const NotFoundPage   = lazy(() => import('./pages/NotFoundPage'))
-
-function AppInner() {
-  const [cursorVariant, setCursorVariant] = useState('default')
-  const isTouchDevice = useIsTouchDevice()
-  const prefersReducedMotion = usePrefersReducedMotion()
-  const location = useLocation()
-  const isLoginPage = location.pathname === '/login'
-
-  const handleSetCursorVariant = useCallback((v) => {
-    if (!isTouchDevice) setCursorVariant(v)
-  }, [isTouchDevice])
-
-  const showCustomCursor = !isTouchDevice && !prefersReducedMotion
-
-  return (
-    <div className="relative min-h-screen" style={{ background: 'var(--bg)', color: 'var(--text)' }}>
-      <a href="#main-content" className="skip-to-main">Skip to main content</a>
-
-      {showCustomCursor && (
-        <>
-          <CustomCursor variant={cursorVariant} />
-          <NoiseOverlay />
-        </>
-      )}
-
-      <ScrollToTop />
-      {!isLoginPage && <Navbar setCursorVariant={handleSetCursorVariant} />}
-
-      <main id="main-content">
-        <AnimatePresence mode="wait">
-          <Suspense fallback={<LoadingScreen />}>
-            <Routes location={location} key={location.pathname}>
-              <Route path="/" element={<HomePage setCursorVariant={handleSetCursorVariant} />} />
-              <Route path="/login" element={<LoginPage setCursorVariant={handleSetCursorVariant} />} />
-              <Route path="/admin/*" element={
-                <ProtectedRoute>
-                  <AdminDashboard setCursorVariant={handleSetCursorVariant} />
-                </ProtectedRoute>
-              } />
-              <Route path="*" element={<NotFoundPage setCursorVariant={handleSetCursorVariant} />} />
-            </Routes>
-          </Suspense>
-        </AnimatePresence>
-      </main>
-    </div>
-  )
-}
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import HomeDashboard from "./pages/HomeDashboard";
+import Ministries from "./pages/Ministries";
+import Events from "./pages/Events";
+import Profile from "./pages/Profile";
+import LogoutButton from "./components/LogoutButton";
 
 function App() {
   return (
-    <HelmetProvider>
-      <ThemeProvider>
-        <AuthProvider>
-          <ChurchDataProvider>
-            <AppInner />
-          </ChurchDataProvider>
-        </AuthProvider>
-      </ThemeProvider>
-    </HelmetProvider>
-  )
+    <Router>
+      <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-black text-white">
+        <nav className="flex justify-between items-center px-6 py-4 border-b border-slate-700 bg-black/80 backdrop-blur-md sticky top-0 z-50">
+          <div className="flex items-center gap-3">
+            <div className="w-11 h-11 bg-gradient-to-br from-amber-500 to-yellow-600 rounded-2xl flex items-center justify-center text-3xl">
+              🙏
+            </div>
+            <div>
+              <h1 className="text-2xl font-bold tracking-tight">Alem Bank Church</h1>
+              <p className="text-xs text-slate-500 -mt-1">አለም ባንክ ገነት ቤተ ክርስቲያን</p>
+            </div>
+          </div>
+          <LogoutButton />
+        </nav>
+
+        <Routes>
+          <Route path="/" element={<HomeDashboard />} />
+          <Route path="/ministries" element={<Ministries />} />
+          <Route path="/events" element={<Events />} />
+          <Route path="/profile" element={<Profile />} />
+        </Routes>
+      </div>
+    </Router>
+  );
 }
 
-export default App
+export default App;
