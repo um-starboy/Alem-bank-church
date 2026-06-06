@@ -3,6 +3,9 @@
   "private": true,
   "version": "1.0.0",
   "type": "module",
+  "engines": {
+  "node": "20.x"
+},
   "description": "አለም ባንክ ቤተ ክርስቲያን - A premium church website",
   "scripts": {
     "dev": "vite",
