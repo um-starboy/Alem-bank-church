@@ -86,7 +86,7 @@ export const apiFetch = async (path, options = {}) => {
 // ── Auth ──────────────────────────────────────────────────────────────────────
 export const authAPI = {
   login: (username, password) =>
-    apiFetch('/auth/login', { method: 'POST', body: JSON.stringify({ username, password }) }),
+    apiFetch('/api/auth/login', { method: 'POST', body: JSON.stringify({ username, password }) }),
 
   logout: (refreshToken) =>
     apiFetch('/auth/logout', { method: 'POST', body: JSON.stringify({ refreshToken }) }),
