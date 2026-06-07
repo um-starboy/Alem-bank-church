@@ -9,7 +9,7 @@
   "description": "አለም ባንክ ቤተ ክርስቲያን - A premium church website",
   "scripts": {
     "dev": "vite",
-    "build": "vite build --force",
+    "build": "vite build",
     "preview": "vite preview",
     "lint": "eslint src --ext .js,.jsx --fix"
   },
