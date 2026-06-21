@@ -20,12 +20,12 @@ export const ChurchDataProvider = ({ children }) => {
     const load = async () => {
       try {
         const [churchInfo, hero, sermons, events, ministries, gallery] = await Promise.allSettled([
-          contentAPI.getInfo(),
-          contentAPI.getHero(),
+          churchAPI.getInfo(),
+          churchAPI.getHero(),
           sermonsAPI.getAll(),
-          fetch(`${import.meta.env.VITE_API_URL}/events`).then(r => r.json()),
-          fetch(`${import.meta.env.VITE_API_URL}/ministries`).then(r => r.json()),
-          fetch(`${import.meta.env.VITE_API_URL}/gallery`).then(r => r.json()),
+          eventsAPI.getAll(),
+          ministriesAPI.getAll(),
+          galleryAPI.getAll(),
         ])
 
         setChurchData(prev => ({
