@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react'
-import { contentAPI } from '../utils/api'
+import { churchAPI, sermonsAPI, eventsAPI, ministriesAPI, galleryAPI } from '../utils/api'
 
 const ChurchDataContext = createContext(null)
 
@@ -22,7 +22,7 @@ export const ChurchDataProvider = ({ children }) => {
         const [churchInfo, hero, sermons, events, ministries, gallery] = await Promise.allSettled([
           contentAPI.getInfo(),
           contentAPI.getHero(),
-          contentAPI.getAll ? contentAPI.getAll() : Promise.resolve([]),
+          sermonsAPI.getAll(),
           fetch(`${import.meta.env.VITE_API_URL}/events`).then(r => r.json()),
           fetch(`${import.meta.env.VITE_API_URL}/ministries`).then(r => r.json()),
           fetch(`${import.meta.env.VITE_API_URL}/gallery`).then(r => r.json()),
@@ -48,37 +48,37 @@ export const ChurchDataProvider = ({ children }) => {
 
   // ── Church Info ──────────────────────────────────────────────────────────────
   const updateChurchInfo = useCallback(async (info) => {
-    await contentAPI.updateInfo(info)
+    await churchAPI.updateInfo(info)
     setChurchData(prev => ({ ...prev, churchInfo: { ...prev.churchInfo, ...info } }))
   }, [])
 
   // ── Hero ─────────────────────────────────────────────────────────────────────
   const updateHero = useCallback(async (heroData) => {
-    await contentAPI.updateHero(heroData)
+    await churchAPI.updateHero(heroData)
     setChurchData(prev => ({ ...prev, hero: { ...prev.hero, ...heroData } }))
   }, [])
 
   // ── About ────────────────────────────────────────────────────────────────────
   const updateAbout = useCallback(async (aboutData) => {
     for (const key of Object.keys(aboutData)) {
-      await contentAPI.updateAbout(key, aboutData[key])
+      await churchAPI.updateAbout(key, aboutData[key])
     }
     setChurchData(prev => ({ ...prev, about: { ...prev.about, ...aboutData } }))
   }, [])
 
   // ── Sermons ──────────────────────────────────────────────────────────────────
   const addSermon = useCallback(async (sermon) => {
-    const created = await contentAPI.create(sermon)
+    const created = await sermonsAPI.create(sermon)
     setChurchData(prev => ({ ...prev, sermons: [...prev.sermons, created] }))
   }, [])
 
   const updateSermon = useCallback(async (id, sermonData) => {
-    const updated = await contentAPI.update(id, sermonData)
+    const updated = await sermonsAPI.update(id, sermonData)
     setChurchData(prev => ({ ...prev, sermons: prev.sermons.map(s => s.id === id ? updated : s) }))
   }, [])
 
   const deleteSermon = useCallback(async (id) => {
-    await contentAPI.delete(id)
+    await sermonsAPI.delete(id)
     setChurchData(prev => ({ ...prev, sermons: prev.sermons.filter(s => s.id !== id) }))
   }, [])
 
