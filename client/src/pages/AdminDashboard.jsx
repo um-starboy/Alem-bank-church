@@ -453,11 +453,16 @@ const SermonsEditor = ({ setCursorVariant }) => {
     setEditingSermon(null)
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
-    if (editingSermon) { updateSermon(editingSermon.id, formData) } else { addSermon(formData) }
-    resetForm()
-    setShowForm(false)
+    try {
+      if (editingSermon) { await updateSermon(editingSermon.id, formData) } else { await addSermon(formData) }
+      resetForm()
+      setShowForm(false)
+    } catch (err) {
+      console.error('Failed to save sermon:', err)
+      alert('Failed to save sermon. Please try again.')
+    }
   }
 
   const handleEdit = (sermon) => {
@@ -559,10 +564,15 @@ const EventsEditor = ({ setCursorVariant }) => {
     setEditingEvent(null)
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
-    if (editingEvent) { updateEvent(editingEvent.id, formData) } else { addEvent(formData) }
-    resetForm()
+    try {
+      if (editingEvent) { await updateEvent(editingEvent.id, formData) } else { await addEvent(formData) }
+      resetForm()
+    } catch (err) {
+      console.error('Failed to save event:', err)
+      alert('Failed to save event. Please try again.')
+    }
     setShowForm(false)
   }
 
@@ -659,10 +669,15 @@ const MinistriesEditor = ({ setCursorVariant }) => {
     setEditingMinistry(null)
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
-    if (editingMinistry) { updateMinistry(editingMinistry.id, formData) } else { addMinistry(formData) }
-    resetForm()
+    try {
+      if (editingMinistry) { await updateMinistry(editingMinistry.id, formData) } else { await addMinistry(formData) }
+      resetForm()
+    } catch (err) {
+      console.error('Failed to save ministry:', err)
+      alert('Failed to save ministry. Please try again.')
+    }
     setShowForm(false)
   }
 
@@ -751,10 +766,15 @@ const GalleryEditor = ({ setCursorVariant }) => {
   const [showForm, setShowForm] = useState(false)
   const [confirmDelete, setConfirmDelete] = useState(null)
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
-    addGalleryItem(formData)
-    setFormData({ src: DEFAULT_EMOJI.gallery, alt: '', category: '' })
+    try {
+      await addGalleryItem(formData)
+      setFormData({ src: DEFAULT_EMOJI.gallery, alt: '', category: '' })
+    } catch (err) {
+      console.error('Failed to save gallery item:', err)
+      alert('Failed to save gallery item. Please try again.')
+    }
     // FIX: Close the form after adding an item
     setShowForm(false)
   }
